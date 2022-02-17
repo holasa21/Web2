@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add new request</title>
+      <script src= "javascript.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  
+
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+
+        <div class="container">
+            <a href="./"><img src="./logo.png" alt="Logo" class="logo"></a>
+            <a href=' ' class="btn btn--v3" alt="Back>">Back</a>
+        </div>
+    </header>
+    <!-- Header -->
+
+    <div class="auth-page-form-inner">
+
+        <form id="request" name="request" method="post" >
+            <fieldset>
+                <legend style="font-size:120%;"><strong>New request</strong></legend>
+                <p>Service type: *</p>
+                <input type="radio" id="promotion" name="type" value="promotion">
+                <label for="promotion">promotion</label><br>
+                <input type="radio" id="leave" name="type" value="leave">
+                <label for="leave">leave</label><br>
+                <input type="radio" id="resignation" name="type" value="resignation">
+                <label for="resignation">resignation</label><br>
+                <input type="radio" id="allowance" name="type" value="allowance">
+                <label for="allowance">allowance</label><br>
+                <input type="radio" id="healthInsurance" name="type" value="healthInsurance">
+                <label for="healthInsurance">health insurance</label><br>
+
+                <br>
+                <hr>
+                <p>
+                    <strong>Description: *</strong><br>
+                                                   <small>(No more than 200 characters)</small>
+                </p>
+
+                <textarea name="description" style="width:500px; height:200px;" maxlength="200"></textarea>
+                <hr>
+                <br>
+                <label for="myfile">   <strong>Select a file: *</strong></label>
+                <p>
+                    1-<input type="file" id="myfile" name="myfile1">  <br>
+                    2-<input type="file" id="myfile" name="myfile2">
+                </p>  <hr>
+                <br>
+
+                <input type="submit" class="btn btn--v2" onclick="validateForm(); return false;" value="Submit">
+                <input type="Reset" class="btn btn--v1" value="Reset">
+
+            </fieldset>
+        </form>
+    </div>
+
+    <footer>
+
+        <!--Copy Rights-->
+        <p>Copyright &copy; 2022 MANGENET . All Rights Reserved</p>
+
+    </footer>
+</body>
+</html>
