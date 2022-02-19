@@ -343,24 +343,6 @@ body {
     box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / 5%);
     font-size: 16px;
 }
-footer{
-    color:#333652;
-    background-color: #90adc689;
-    padding:1%;
-    position:absolute;
-    bottom:0;
-    width:100%;
-    
-
-}
-footer strong {
-    font-size: 30px;
-}
-footer p{
-    text-align: center;
-    
- }
-
 
  #myVideo {
     position: fixed;
