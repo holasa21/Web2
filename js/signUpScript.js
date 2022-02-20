@@ -17,7 +17,7 @@ function validation() {
 	return false;
 	}
 	else {
-     window.location.href="EmpHome.html";
+     window.location.href="employee.html";
 	return true;
 	}
 	
