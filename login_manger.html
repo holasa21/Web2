@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Manger Login</title>
+	<link rel="stylesheet" href="css/manger_login.css">
+</head>
+<body>
+	 <!-- Header -->
+     <header class="header">
+        <div class="container">
+            <a href="./"><img src="./logo.png" alt="Logo" class="logo"></a>
+        </div>
+    </header>
+    <!--contant-->
+<div class="wrapper">
+	<div class="form">
+		<div class="title">
+			Log In Manger
+		</div>
+		<form method="post" onsubmit="validation(); return false;">
+			<div class="input_wrap">
+				<div class="input_field">
+					User ID <input type="text" placeholder="Only Numbers" class="input" id="input_text" name="onlynumbers" pattern="\d{1,5}" maxlength="5">
+				</div>
+			</div>
+			<div class="input_wrap">
+				<label for="input_password">Password</label>
+				<div class="input_field">
+					<input type="password" placeholder="letters and numbers" class="input" id="input_password" name="lettersNumbers">
+				</div>
+			</div>
+			<p><em> Note: All feilds are above 1 accept password is above 3</em></p>
+			<br>
+			<div class="input_wrap">
+				<span class="error_msg">Invalid Inputs!. Please try again</span>
+				<button type="submit" id="login_btn" class="btn disabled" value="Login" disabled="true"> log in</button>
+			</div>
+		</form>
+	</div>
+</div>
+<script src="js/login_manger.js"></script>
+</body>
+</html>
