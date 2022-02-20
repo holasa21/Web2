@@ -21,7 +21,7 @@ var login_btn = document.querySelector("#login_btn");
 
 input_fields.forEach(function(input_item){
 	input_item.addEventListener("input", function(){
-		if(input_item.value.length > 3){
+		if(input_item.value.length > 2){
 			login_btn.disabled = false;
 			login_btn.className = "btn enabled"
 		}
