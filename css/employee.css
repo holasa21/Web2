@@ -1,0 +1,121 @@
+*,
+*::after,
+*::before {
+    box-sizing: border;
+    margin: 0;
+    padding: 0;
+} /* for the box*/
+
+html {
+    font-size: 62.5%;
+    background-image: url('media/img2.jpg');
+    background-position: center;
+    background-color: #333562;
+}
+
+body {
+    color: #ffffff;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 3fr;
+    grid-template-areas: "emp-info buttons"
+        "requests requests";
+    gap: 3rem 0;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    max-width: 900px;
+    margin: 1rem auto;
+    padding: 4rem;
+    font-size: 2rem;
+}
+
+#emp-info {
+    grid-area: emp-info;
+}
+
+#buttons {
+    grid-area: buttons;
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    gap: 1rem 0;
+}
+
+#buttons a{
+    color: #ffffff;
+}
+
+#requests {
+    grid-area: requests;
+}
+
+.emp-welcome {
+    color: #ffffff;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.emp-name {
+    font-weight: normal;
+    font-style: normal;
+}
+
+.main-title{
+    color: white;
+    background-color: #333562;
+    padding: .5rem 0;
+    padding-left: 1rem;
+    font-size: 1.8rem;
+    border: 2px solid #b7bfcf;
+    border-bottom: none;
+    font-weight: 600;
+
+    margin-bottom: .5rem;
+}
+
+.request-heading {
+    color: white;
+    background-color: #333562;
+    padding: .5rem 0;
+    padding-left: 1rem;
+    font-size: 1.8rem;
+    border: 2px solid #b7bfcf;
+    border-bottom: none;
+    font-weight: 600;
+
+}
+
+#requests table{
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #b7bfcf;
+    border-top: none;
+    margin-bottom: 4rem;
+    background-color: #b7bfcf;
+}
+
+#requests table td,
+#requests table th{
+    padding: .5rem 1rem;
+    border: 1px solid #90adc9;
+    text-align: left;
+}
+
+#requests table th{
+    color: white;
+    background-color: #333652;
+    font-weight: 600;
+}
+
+#requests table a{
+    color: rgb(255, 255, 255);
+
+}
+.request{
+    font-weight: 600;
+    text-decoration: underline;
+}
