@@ -11,7 +11,7 @@
 }
 
 body{
-	background-image: url('img1.jpg');
+	background-image: url('media/img1.jpg');
 	/*background-color: #727272;*/
     background-repeat: no-repeat;
     background-attachment: fixed;
