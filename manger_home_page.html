@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
+<?php
+	$serverCon = mysqli_connect("localhost", "root", "");
+	
+	if(!$serverCon)
+		die (mysqli_connect_errno());
 
+	$databaseCon = mysqli_connect("root", "root", "", "limitless");
+	
+	if(!$databaseCon)
+		die (mysqli_connect_errno());
+?>
 <head>
     <title>Manager home page</title>
 
