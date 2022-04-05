@@ -1,14 +1,27 @@
 <?php
 include 'employee_auth_middleware.php';
 require 'connection.php';
+error_reporting(E_ALL);
+ini_set('display_errors',1);
+
+$uploadDir = 'files';
 
 if (isset($_POST)) {
-
     $serType = $_POST['type'];
     $desc = $_POST['description'];
-    $att1 = $_POST['myfile1'];
-    $att2 = $_POST['myfile2'];
-
+    if(isset($_FILES['myfile1']) || isset($_FILES['myfile2'])){
+        if(!is_dir($uploadDir)){
+            mkdir($uploadDir);
+        }
+        if(isset($_FILES['myfile1'])){
+            $file1Name = $_FILES['myfile1']['name'];
+        move_uploaded_file($_FILES['myfile1']['tmp_name'], $uploadDir.'/'.$file1Name);
+        }
+        if(isset($_FILES['myfile2'])){
+            $file2Name = $_FILES['myfile2']['name'];
+        move_uploaded_file($_FILES['myfile2']['tmp_name'], $uploadDir.'/'.$file2Name);
+        }
+    }
     $sqlSerId = "SELECT * FROM service WHERE type = '$serType'";
     $resultSerId = $conn->query($sqlSerId);
     $row = $resultSerId->fetch_assoc();
@@ -18,7 +31,7 @@ if (isset($_POST)) {
     $EmpId = $_SESSION['employee_id'] ;
     					
     $sql = "INSERT INTO request (emp_id, service_id, description, attachment1, attachment2, status)
-                VALUES ('$EmpId', '$serId', '$desc', '$att1', '$att1','In progress')";
+                VALUES ('$EmpId', '$serId', '$desc', '$uploadDir/$file1Name', '$uploadDir/$file2Name','In progress')";
 
     if ($conn->query($sql) === TRUE) {
         header('Location: Request_information_page.php');

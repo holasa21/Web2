@@ -1,5 +1,6 @@
 <?php
 include 'employee_auth_middleware.php';
+require 'connection.php';
 ?>
 <!DOCTYPE html>
 <html>
