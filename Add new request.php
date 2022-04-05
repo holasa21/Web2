@@ -39,60 +39,62 @@ include 'employee_auth_middleware.php';
         </nav>
     </header>
 
-    <!-- Content -->
-    <div class="container my-5 mx-6 px-5">
-        <form id="request" name="request" method="post" action="" class="bg-lightgrey p-5 mx-5 text-darksky shadow rounded">
+    <main>
+        <!-- Content -->
+        <div class="container my-5 mx-6 px-5">
+            <form id="request" name="request" method="post" onsubmit="validateForm();" action="add_new_process.php" enctype="multipart/form-data" class="bg-lightgrey p-5 mx-5 text-darksky shadow rounded">
 
-            <legend>
-                <div class="text-center"><strong class="fs-2">New Request</strong></div>
-            </legend>
-            <p class="fw-bold fs-5">Service type: *</p>
-            <div class="form-check mb-2">
-                <input type="radio" id="promotion" name="type" value="promotion">
-                <label class="fs-5" for="promotion">promotion</label><br>
-            </div>
-            <div class="form-check mb-2">
-                <input type="radio" id="leave" name="type" value="leave">
-                <label class="fs-5" for="leave">leave</label><br>
-            </div>
-            <div class="form-check mb-2">
-                <input type="radio" id="resignation" name="type" value="resignation">
-                <label class="fs-5" for="resignation">resignation</label><br>
-            </div>
-            <div class="form-check mb-2">
-                <input type="radio" id="allowance" name="type" value="allowance">
-                <label class="fs-5" for="allowance">allowance</label><br>
-            </div>
-            <div class="form-check mb-2">
-                <input type="radio" id="healthInsurance" name="type" value="healthInsurance">
-                <label class="fs-5" for="healthInsurance">health insurance</label><br>
-            </div>
+                <legend>
+                    <div class="text-center"><strong class="fs-2">New Request</strong></div>
+                </legend>
+                <p class="fw-bold fs-5">Service type: *</p>
+                <div class="form-check mb-2">
+                    <input type="radio" id="promotion" name="type" value="Promotion">
+                    <label class="fs-5" for="promotion">promotion</label><br>
+                </div>
+                <div class="form-check mb-2">
+                    <input type="radio" id="leave" name="type" value="Leave">
+                    <label class="fs-5" for="leave">leave</label><br>
+                </div>
+                <div class="form-check mb-2">
+                    <input type="radio" id="resignation" name="type" value="Resignation">
+                    <label class="fs-5" for="resignation">resignation</label><br>
+                </div>
+                <div class="form-check mb-2">
+                    <input type="radio" id="allowance" name="type" value="Allowance">
+                    <label class="fs-5" for="allowance">allowance</label><br>
+                </div>
+                <div class="form-check mb-2">
+                    <input type="radio" id="healthInsurance" name="type" value="healthInsurance">
+                    <label class="fs-5" for="healthInsurance">health insurance</label><br>
+                </div>
 
-            <br>
-            <hr>
-            <p class="fw-bold fs-5">Description: *<br>
-                <small class="fw-normal">(No more than 200 characters)</small>
-            </p>
+                <br>
+                <hr>
+                <p class="fw-bold fs-5">Description: *<br>
+                    <small class="fw-normal">(No more than 200 characters)</small>
+                </p>
 
-            <textarea class="rounded text-darksky" name="description" style="width:500px; height:200px;" maxlength="200"></textarea>
-            <hr>
-            <br>
-            <label class="fw-bold fs-5" for="myfile">Attach file: *</label>
-            <br>
-            <br>
-            <p>
-                1-<input type="file" id="myfile" name="myfile1">
+                <textarea class="rounded text-darksky" name="description" style="width:500px; height:200px;" maxlength="200"></textarea>
+                <hr>
+                <br>
+                <label class="fw-bold fs-5" for="myfile">Attach file: *</label>
                 <br>
                 <br>
-                2-<input type="file" id="myfile" name="myfile2">
-            </p>
-            <hr>
-            <br>
+                <p>
+                    1-<input type="file" id="myfile" name="myfile1">
+                    <br>
+                    <br>
+                    2-<input type="file" id="myfile" name="myfile2">
+                </p>
+                <hr>
+                <br>
 
-            <input type="submit" class=" offset-3 col-2 btn btn-lg btn-darksky" onclick="validateForm(); return false;" value="Submit" disabled>
-            <input type="Reset" class=" offset-2 col-2 btn btn-lg  btn-grey" value="Reset">
-        </form>
-    </div>
+                <input type="submit" class=" offset-3 col-2 btn btn-lg btn-darksky" value="Submit">
+                <input type="Reset" class=" offset-2 col-2 btn btn-lg  btn-grey" value="Reset">
+            </form>
+        </div>
+    </main>
 
     <footer id="footer1">
 
