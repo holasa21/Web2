@@ -14,6 +14,7 @@ if (isset($_POST['signout'])) {
     unset($_SESSION['employee_id']);
     unset($_SESSION['employee_role']);
     header('Location: index.php');
+    $conn->close();
 }
 
 // Get Logged in user record
@@ -24,5 +25,3 @@ if ($result->num_rows > 0) {
 
     $auth = $result->fetch_assoc();
 }
-
-$conn->close();
