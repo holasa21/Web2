@@ -1,5 +1,8 @@
 <?php
 include 'employee_auth_middleware.php';
+require_once 'connection.php';
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,14 +19,60 @@ include 'employee_auth_middleware.php';
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
+<?php
+
+if(isset($_POST['update'])){
+    $up_id = $_POST['id'] ;
+    $type_update = $_POST['type'] ;
+    $dec_update = $_POST['description'] ;
+
+    $up_qry = " UPDATE `request` SET `service_id`='$type_update',`description`='$dec_update' WHERE id = $up_id " ;
+    $update = $conn->query($up_qry);
+    if($update){
+
+        echo "<script> window.onload = function() {
+            Swal.fire(
+                'Done',
+                'Request Updated',
+                'success'
+            );
+        }; </script>" ;
+
+    }
+    else{
+        echo "<script> window.onload = function() {
+            Swal.fire(
+                'Error',
+                'Request Not Updated',
+                'error'
+            );
+        }; </script>" ;
+    }
+}
+
+
+$employee_id = $auth['id'] ;
+
+
+$requests_qry_processing = " SELECT *,request.id as id FROM `request` LEFT JOIN `service` ON request.service_id = service.id WHERE request.emp_id = '$employee_id' AND request.status= 'In progress' ";
+$requests_processing = $conn->query($requests_qry_processing);
+
+
+
+$requests_qry_approved = " SELECT *,request.id as id FROM `request` LEFT JOIN `service` ON request.service_id = service.id WHERE request.emp_id = '$employee_id' AND request.status= 'Approved' ";
+$requests_approved = $conn->query($requests_qry_approved);
+
+?>
 
 <body>
     <header>
         <nav class="navbar navbar-lightgrey bg-lightgrey">
             <div class="container">
                 <div class="col-1">
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand" href="employee.php">
                         <img src="media/mini-logo.png" alt="" width="" height="75" class="d-inline-block align-text-top">
                     </a>
                 </div>
@@ -35,7 +84,7 @@ include 'employee_auth_middleware.php';
     </header>
     <div class="dashboard bg-lightgrey my-3">
         <div id="emp-info">
-            <p class="emp-welcome text-darksky fs-1">Welcome <span class="emp-name"> <?php echo $auth['first_name'] ?></span>!</p>
+            <p class="emp-welcome text-darksky fs-1">Welcome <span class="emp-name" style="text-transform: capitalize;"> <?php echo $auth['first_name']." ".$auth['last_name'] ?></span>!</p>
             <p>Employee's ID: <span class="emp-id"><?php echo $auth['emp_number'] ?></span></p>
             <P>Job Title: <span class="job-title"><?php echo $auth['job_title'] ?></span></p>
 
@@ -51,34 +100,44 @@ include 'employee_auth_middleware.php';
             <h3 class="request-heading">In progress</h3>
 
             <table>
-                <tr>
-                    <td class="request"><a href="Request_information_page.php">1111- Promotion</a></td>
-                    <td><a class="col-6 btn btn-lg btn-darksky fs-3" href="Edit_request_page.php">Edit</a></td>
-
-                </tr>
-                <tr>
-                    <td class="request"><a href="Request_information_page.php">1111- Leave</a></td>
-                    <td><a class="col-6 btn btn-lg btn-darksky fs-3" href="Edit_request_page.php">Edit</a></td>
-
-                </tr>
+                <?php
+                    if ($requests_processing->num_rows > 0) {
+                        while($request_processing = $requests_processing->fetch_assoc()){ ?>
+                           <tr>
+                                <td class="request"><a href="Request_information_page.php?id=<?= $request_processing['id'] ?>"><?= $request_processing['id']." - ".$request_processing['type'] ?></a></td>
+                                <td><a class="col-6 btn btn-lg btn-darksky fs-3" href="Edit_request_page.php?id=<?= $request_processing['id'] ?>">Edit</a></td>
+                            </tr>
+                        <?php }
+                    }
+                    else{
+                        echo "No Request found In progress" ;
+                    }
+                ?>
             </table>
 
             <h3 class="request-heading">Previous Requests</h3>
 
             <table>
-
                 <tr>
                     <th>Requests</th>
                     <th>Status</th>
-                    <th> </th>
                 </tr>
 
-                <tr>
-                    <td class="request"><a href="Request_information_page.php">1111- Allowance</a></td>
-                    <td>Approved</td>
+                <?php
+                    if ($requests_approved->num_rows > 0) {
+                        while($request_approved = $requests_approved->fetch_assoc()){ ?>
 
-                    <td><a class="col-6 btn btn-lg btn-darksky fs-3" href="Edit_request_page.php">Edit</a></td>
-                </tr>
+                        <tr>
+                            <td class="request"><a href="Request_information_page.php?id=<?= $request_approved['id'] ?>"><?= $request_approved['id']." - ".$request_approved['type'] ?></a></td>
+                            <td><?= $request_approved['status'] ?></td>
+                        </tr>
+
+                        <?php }
+                    }
+                    else{
+                        echo "<tr><td colspan='2'>No Request found In Approved</td></td>" ;
+                    }
+                ?>
 
             </table>
 

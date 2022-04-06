@@ -1,6 +1,29 @@
-<?php
+<?php 
 include 'employee_auth_middleware.php';
+require_once 'connection.php';
+
+
+if(!isset($_GET['id'])){
+    header('Location: employee.php');
+}
+else{
+    $employee_id = $auth['id'] ;
+    $request_id = $_GET['id'] ;
+
+    $request = " SELECT *,request.id as id FROM `request` LEFT JOIN `service` ON request.service_id = service.id  WHERE  request.id= '$request_id '";
+    $request = $conn->query($request);
+    if($request->num_rows > 0){
+        $req_data = $request->fetch_assoc() ;
+    }
+    else{
+        header('Location: employee.php');
+    }
+}
+
+
+
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -44,32 +67,26 @@ include 'employee_auth_middleware.php';
     <!-- Content -->
     <main>
         <div class="container my-5 mx-6 px-5">
-            <form id="request" name="request" method="post" action="" class="bg-lightgrey p-5 mx-5 text-darksky shadow rounded">
+            <form id="request" name="request" method="post" action="employee.php" class="bg-lightgrey p-5 mx-5 text-darksky shadow rounded">
 
                 <legend>
                     <div class="text-center"><strong class="fs-2">Edit Request</strong></div>
                 </legend>
                 <p class="fw-bold fs-5">Service type: *</p>
                 <div class="form-check mb-2">
-                    <input type="radio" id="promotion" name="type" value="promotion" checked>
-                    <label class="fs-5" for="promotion">promotion</label><br>
+                    <input type="radio" id="promotion" name="type" value="1" <?= $req_data['type']=='Promotion' ? 'checked' : '' ?>>
+                    <label class="fs-5" for="promotion">Promotion</label><br>
                 </div>
                 <div class="form-check mb-2">
-                    <input type="radio" id="leave" name="type" value="leave">
-                    <label class="fs-5" for="leave">leave</label><br>
+                    <input type="radio" id="leave" name="type" value="2" <?= $req_data['type']=='Leave' ? 'checked' : '' ?>>
+                    <label class="fs-5" for="leave">Leave</label><br>
                 </div>
                 <div class="form-check mb-2">
-                    <input type="radio" id="resignation" name="type" value="resignation">
-                    <label class="fs-5" for="resignation">resignation</label><br>
+                    <input type="radio" id="allowance" name="type" value="3" <?= $req_data['type']=='Allowance' ? 'checked' : '' ?>>
+                    <label class="fs-5" for="allowance">Allowance</label><br>
                 </div>
-                <div class="form-check mb-2">
-                    <input type="radio" id="allowance" name="type" value="allowance">
-                    <label class="fs-5" for="allowance">allowance</label><br>
-                </div>
-                <div class="form-check mb-2">
-                    <input type="radio" id="healthInsurance" name="type" value="healthInsurance">
-                    <label class="fs-5" for="healthInsurance">health insurance</label><br>
-                </div>
+
+                <input type="hidden" name="id" value="<?= $req_data['id'] ?>">
 
                 <br>
                 <hr>
@@ -77,10 +94,10 @@ include 'employee_auth_middleware.php';
                     <small class="fw-normal">(No more than 200 characters)</small>
                 </p>
 
-                <textarea class="rounded text-darksky" name="description" style="width:500px; height:200px;" maxlength="200">I am writing this application to inform you regarding my illness. I am having a severe headache and throat infection since last night. the doctor has advised me to take complete rest for 4 days. the medical certificate is enclosed with a letter to to confirm that I need break from work to recover.</textarea>
+                <textarea class="rounded text-darksky" name="description" style="width:500px; height:200px;" maxlength="200"><?= $req_data['description'] ?></textarea>
                 <hr>
                 <br>
-                <label class="fw-bold fs-5" for="myfile">Attach file: *</label>
+                <!-- <label class="fw-bold fs-5" for="myfile">Attach file: *</label>
                 <br>
                 <br>
                 <p class="fw-bold">
@@ -96,10 +113,10 @@ include 'employee_auth_middleware.php';
                         Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
                     <br><input type="file" id="myfile" name="linkFile">
                 </p>
-                <hr>
+                <hr> -->
                 <br>
 
-                <input type="submit" class=" offset-4 col-4 btn btn-lg btn-darksky" onclick="validateForm(); return false;" value="Update" disabled>
+                <input type="submit" name="update" class=" offset-4 col-4 btn btn-lg btn-darksky"  value="Update" >
             </form>
         </div>
     </main>
