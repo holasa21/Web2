@@ -19,11 +19,7 @@ else{
         header('Location: employee.php');
     }
 }
-
-
-
 ?>
-
 <!doctype html>
 <html lang="en">
 
@@ -66,6 +62,7 @@ else{
                 <h1 class="d-inline fw-bold text-darksky"><?= $req_data['type'] ?></h1>
                 <h2 class="d-inline text-muted ms-2 display-6 fs-3"><?= $req_data['status'] ?></h2>
                 <h5 class="my-3 fs-4" style="text-transform: capitalize;"><?= $req_data['first_name']." ".$req_data['last_name'] ?></h5>
+                <a class="col-2 btn btn-darksky fs-3" style="position: absolute; top:25%; margin:0% 0% 0% 59.5%;" href="Edit_request_page.php?id=<?= $request_id ?>">Edit</a>
 
                 <!-- <button type="button" class="btn btn-success text-white">Approve</button>
                 <button type="button" class="btn btn-danger text-white">Decline</button>
@@ -79,7 +76,6 @@ else{
                     </p>
                     <strong class="d-inline text-darksky ms-2 display-6 fs-3 fw-bold">Attachment:</strong>
                     <div class="mt-3">
-                        <!-- <img src="media/sickLeave.webp" style="width:15em"> -->
                         <?php
                         if(!empty($req_data['attachment1'])){
                             if(file_exists($req_data['attachment1']) && $req_data['attachment1']!='files/'){ ?>

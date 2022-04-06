@@ -27,14 +27,20 @@ if (isset($_POST)) {
 
     $serId = $_SESSION['service_type'];
     $EmpId = $_SESSION['employee_id'] ;
-    					
+
+    if(strlen($file1Name)>0 && strlen($file2Name)>0 ){			
     $sql = "INSERT INTO request (emp_id, service_id, description, attachment1, attachment2, status)
-                VALUES ('$EmpId', '$serId', '$desc', '$uploadDir/$file1Name', '$uploadDir/$file2Name','In progress')";
+                VALUES ('$EmpId', '$serId', '$desc', '$uploadDir/$file1Name', '$uploadDir/$file2Name','in progress')";}
+    if(strlen($file1Name)>0 && strlen($file2Name)==0){			
+        $sql = "INSERT INTO request (emp_id, service_id, description, attachment1, status)
+        VALUES ('$EmpId', '$serId', '$desc', '$uploadDir/$file1Name','in progress')";}
+    if(strlen($file1Name)==0 && strlen($file2Name)>0){			
+        $sql = "INSERT INTO request (emp_id, service_id, description, attachment2, status)
+                    VALUES ('$EmpId', '$serId', '$desc','$uploadDir/$file2Name','in progress')";}
 
     if ($conn->query($sql) === TRUE) {
         header('Location: Request_information_page.php');
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
-    $conn->close();
 }
