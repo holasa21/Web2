@@ -44,7 +44,7 @@ session_start();
             <form method="post" action="login_process.php" onsubmit="validation(event);">
                 <div class="input_wrap">
                     <div class="input_field">
-                        User ID <input type="text" placeholder="Only Numbers" class="input" id="input_text" name="emp_number" pattern="\d{1,5}" maxlength="5">
+                        User ID <input type="text" placeholder="Only Numbers" class="input" id="input_text" name="emp_number" pattern="\d{1,5}" maxlength="10">
                     </div>
                 </div>
                 <div class="input_wrap">
