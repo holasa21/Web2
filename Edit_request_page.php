@@ -67,7 +67,7 @@ else{
     <!-- Content -->
     <main>
         <div class="container my-5 mx-6 px-5">
-            <form id="request" name="request" method="post" action="employee.php" class="bg-lightgrey p-5 mx-5 text-darksky shadow rounded">
+            <form id="request" name="request" method="post" action="employee.php" enctype="multipart/form-data" class="bg-lightgrey p-5 mx-5 text-darksky shadow rounded">
 
                 <legend>
                     <div class="text-center"><strong class="fs-2">Edit Request</strong></div>
@@ -85,6 +85,16 @@ else{
                     <input type="radio" id="allowance" name="type" value="3" <?= $req_data['type']=='Allowance' ? 'checked' : '' ?>>
                     <label class="fs-5" for="allowance">Allowance</label><br>
                 </div>
+                
+                <div class="form-check mb-2">
+                    <input type="radio" id="resignation" name="type" value="4" <?= $req_data['type']=='Resignation' ? 'checked' : '' ?>>
+                    <label class="fs-5" for="resignation">Resignation</label><br>
+                </div>
+                
+                <div class="form-check mb-2">
+                    <input type="radio" id="healthInsurance" name="type" value="5" <?= $req_data['type']=='healthInsurance' ? 'checked' : '' ?>>
+                    <label class="fs-5" for="healthInsurance">healthInsurance</label><br>
+                </div>
 
                 <input type="hidden" name="id" value="<?= $req_data['id'] ?>">
 
@@ -97,23 +107,37 @@ else{
                 <textarea class="rounded text-darksky" name="description" style="width:500px; height:200px;" maxlength="200"><?= $req_data['description'] ?></textarea>
                 <hr>
                 <br>
-                <!-- <label class="fw-bold fs-5" for="myfile">Attach file: *</label>
+                <label class="fw-bold fs-5" for="myfile">Attach file: *</label>
                 <br>
                 <br>
                 <p class="fw-bold">
-                    1-Change the current image:
-                    <br><img class="img-thumbnail mx-5 my-4" style="width: 10%;" src="media/sickLeave.webp">
+                    1-Change the current File:
                     <br>
-                    <input type="file" id="myfile" name="imageFile" accept="image/*">
+                    <?php
+                        if(!empty($req_data['attachment1'])){
+                            if(file_exists($req_data['attachment1']) && $req_data['attachment1']!='files/'){ ?>
+                                <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment1'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
+                            <?php }
+                        }
+                    ?>
+                    <br>
+                    <input type="file" id="myfile" name="myfile1" >
+                    <input type="hidden" name="file1ExistingValue" value="<?= $req_data['attachment1'] ?>">
                     <br>
                     <br>
                     2-Change the current File:
                     <br>
-                    <a class="btn btn-outline-darksky col-2 my-3 fw-bold" href="https://www.allbusinesstemplates.com/thumbs/3323dcc7-6e1e-4814-832f-fe737efca565_1.png">File
-                        Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
-                    <br><input type="file" id="myfile" name="linkFile">
+                    <?php
+                        if(!empty($req_data['attachment2'])){
+                            if(file_exists($req_data['attachment2']) && $req_data['attachment2']!='files/'){ ?>
+                                <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment2'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
+                            <?php }
+                        }
+                    ?>
+                    <br><input type="file" id="myfile" name="myfile2">
+                    <input type="hidden" name="file2ExistingValue" value="<?= $req_data['attachment2'] ?>">
                 </p>
-                <hr> -->
+                <hr>
                 <br>
 
                 <input type="submit" name="update" class=" offset-4 col-4 btn btn-lg btn-darksky"  value="Update" >

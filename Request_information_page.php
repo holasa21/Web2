@@ -82,14 +82,14 @@ else{
                         <!-- <img src="media/sickLeave.webp" style="width:15em"> -->
                         <?php
                         if(!empty($req_data['attachment1'])){
-                            if(file_exists($req_data['attachment1'])){ ?>
+                            if(file_exists($req_data['attachment1']) && $req_data['attachment1']!='files/'){ ?>
                                 <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment1'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
                             <?php }
                         }
                         ?>
                         <?php
                         if(!empty($req_data['attachment2'])){
-                            if(file_exists($req_data['attachment2'])){ ?>
+                            if(file_exists($req_data['attachment2']) && $req_data['attachment2']!='files/'){ ?>
                                 <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment2'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
                             <?php }
                         }
