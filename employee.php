@@ -2,7 +2,6 @@
 include 'employee_auth_middleware.php';
 require_once 'connection.php';
 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +28,29 @@ if(isset($_POST['update'])){
     $type_update = $_POST['type'] ;
     $dec_update = $_POST['description'] ;
 
-    $up_qry = " UPDATE `request` SET `service_id`='$type_update',`description`='$dec_update' WHERE id = $up_id " ;
+    $uploadDir = 'files';
+
+    if(isset($_FILES['myfile1']) || isset($_FILES['myfile2'])){
+        if(!is_dir($uploadDir)){
+            mkdir($uploadDir);
+        }
+        if(isset($_FILES['myfile1']) && $_FILES['myfile1']['size']>0){
+            $file1Name = $uploadDir.'/'.$_FILES['myfile1']['name'];
+        move_uploaded_file($_FILES['myfile1']['tmp_name'], $file1Name);
+        }
+        else{
+            $file1Name = $_POST['file1ExistingValue'] ;
+        }
+        if(isset($_FILES['myfile2']) && $_FILES['myfile2']['size']>0){
+            $file2Name = $uploadDir.'/'.$_FILES['myfile2']['name'];
+        move_uploaded_file($_FILES['myfile2']['tmp_name'], $uploadDir.'/'.$file2Name);
+        }
+        else{
+            $file2Name = $_POST['file2ExistingValue'] ;
+        }
+    }
+
+    $up_qry = " UPDATE `request` SET `service_id`='$type_update',`description`='$dec_update', `attachment1`='$file1Name',`attachment2`='$file2Name' WHERE id = $up_id " ;
     $update = $conn->query($up_qry);
     if($update){
 
@@ -57,18 +78,20 @@ if(isset($_POST['update'])){
 $employee_id = $auth['id'] ;
 
 
-$requests_qry_processing = " SELECT *,request.id as id FROM `request` LEFT JOIN `service` ON request.service_id = service.id WHERE request.emp_id = '$employee_id' AND request.status= 'In progress' ";
+$requests_qry_processing = " SELECT *,request.id as id FROM `request` LEFT JOIN `service` ON request.service_id = service.id WHERE request.emp_id = '$employee_id' AND request.status= 'in progress' ";
 $requests_processing = $conn->query($requests_qry_processing);
 
 
 
-$requests_qry_approved = " SELECT *,request.id as id FROM `request` LEFT JOIN `service` ON request.service_id = service.id WHERE request.emp_id = '$employee_id' AND request.status= 'Approved' ";
+
+$requests_qry_approved = " SELECT *,request.id as id FROM `request` LEFT JOIN `service` ON request.service_id = service.id WHERE request.emp_id = '$employee_id' AND request.status= 'approved' ";
 $requests_approved = $conn->query($requests_qry_approved);
 
 ?>
 
 <body>
     <header>
+        <main>
         <nav class="navbar navbar-lightgrey bg-lightgrey">
             <div class="container">
                 <div class="col-1">
@@ -157,6 +180,8 @@ $requests_approved = $conn->query($requests_qry_approved);
     </form>
 
     <script src="js/employee.js"></script>
+    
+    </main>
 </body>
 
 </html>
