@@ -2,7 +2,7 @@
 session_start();
 include_once('connection.php');
 
-if (!isset($_SESSION['manager_id']) || !isset($_SESSION['type'])) {
+if (!isset($_SESSION['manager_id'])) {
     header("Location: login_manger.php");
     die();
 }
