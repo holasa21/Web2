@@ -148,6 +148,7 @@ $requests_approved = $conn->query($requests_qry_processed);
                 <tr>
                     <th>Requests</th>
                     <th>Status</th>
+                    <th>Options </th>
                 </tr>
 
                 <?php
@@ -157,6 +158,7 @@ $requests_approved = $conn->query($requests_qry_processed);
                         <tr>
                             <td class="request"><a href="Request_information_page.php?id=<?= $request_approved['id'] ?>"><?= $request_approved['id']." - ".$request_approved['type'] ?></a></td>
                             <td><?= $request_approved['status'] ?></td>
+                            <td><a class="col-6 btn btn-lg btn-darksky fs-3" href="Edit_request_page.php?id=<?= $request_approved['id'] ?>">Edit</a></td>
                         </tr>
 
                         <?php }

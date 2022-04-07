@@ -38,8 +38,13 @@ if (isset($_POST)) {
         $sql = "INSERT INTO request (emp_id, service_id, description, attachment2, status)
                     VALUES ('$EmpId', '$serId', '$desc','$uploadDir/$file2Name','in progress')";}
 
-    if ($conn->query($sql) === TRUE) {
-        header('Location: Request_information_page.php');
+    if ($conn->query($sql) == TRUE) {
+        $req_id = "SELECT * FROM `request` WHERE  emp_id= '$EmpId' AND description='$description' AND status='in progress'";
+        $resultReqId=$conn->query($req_id);
+        if ($resultReqId == TRUE){
+            $row = $resultReqId->fetch_assoc();
+            $req_id_found = $row['id'];
+        header('Location: Request_information_page.php?id='.$req_id_found);}
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
