@@ -6,10 +6,7 @@ if (!isset($_SESSION['manager_id'])) {
     header("Location: login_manger.php");
     die();
 }
-if ($_SESSION['manager_role'] != "manager") {
-    header("Location: EmployeeHomePage.php");
-    die();
-}
+
 $id = $_SESSION['manager_id'];
 $result = mysqli_query($conn, "SELECT * FROM `manager` WHERE id='$id';") or die(mysqli_error($conn));
 $array = mysqli_fetch_assoc($result);
@@ -18,7 +15,7 @@ $result1 = mysqli_query($conn, "SELECT * FROM `employee`") or die(mysqli_error($
 while ($n = mysqli_fetch_assoc($result1))
     $emp[] = $n;
 
-$result2 = mysqli_query($conn, "SELECT * FROM `request`") or die(mysqli_error($conn));
+$result2 = mysqli_query($conn, "SELECT * FROM `request` ORDER BY status DESC") or die(mysqli_error($conn));
 while ($n = mysqli_fetch_assoc($result2))
     $req[] = $n;
 
@@ -32,24 +29,21 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     $action = $_GET['action'];
     $req_id = htmlspecialchars($_GET['id'], ENT_QUOTES);
     if ($action == "approve") {
-        $req_q = mysqli_query($db_conn, "SELECT * FROM requests WHERE ID = '$req_id'");
+        $req_q = mysqli_query($conn, "SELECT * FROM `request` WHERE id = '$req_id' ")or die(mysqli_error($conn));
         $req_data = mysqli_fetch_assoc($req_q);
-        if ($req_data['status'] == "0") {
-            $req_q = mysqli_query($db_conn, "UPDATE requests SET status = 'Approved' WHERE ID = '$req_id'");
-            if ($req_q) {
-                header("Location: manager-homepage.php");
-                die();
-            }
+
+        $req_q = mysqli_query($conn, "UPDATE `request` SET status = 'approved' WHERE id = '$req_id'");
+        if ($req_q) {
+            header("Location: manger_home_page.php");
+            die();
         }
     } else if ($action == "decline") {
-        $req_q = mysqli_query($db_conn, "SELECT * FROM requests WHERE ID = '$req_id'");
+        $req_q = mysqli_query($conn, "SELECT * FROM `request` WHERE id = '$req_id'")or die(mysqli_error($conn));
         $req_data = mysqli_fetch_assoc($req_q);
-        if ($req_data['status'] == "0") {
-            $req_q = mysqli_query($db_conn, "UPDATE requests SET status = 'Decline' WHERE ID = '$req_id'");
-            if ($req_q) {
-                header("Location: manager-homepage.php");
-                die();
-            }
+        $req_q = mysqli_query($conn, "UPDATE `request` SET status = 'declined' WHERE id = '$req_id'");
+        if ($req_q) {
+            header("Location: manger_home_page.php");
+            die();
         }
     }
 }
@@ -76,137 +70,130 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
     </head>
 
     <body>
+        <main>
+            <!-- Header -->
+            <header class="header">
 
-        <!-- Header -->
-        <header class="header">
-            <div class="container">
-                <a href="./"><img src="media/logo.png" alt="Logo" class="logo"></a>
-                <a href='./index.html' class="btn btn--v3">Sign out</a>
-            </div>
-        </header>
+                <div class="container">
 
-        <h1 id="name">Welcome <?php
-            echo $array['first_name'] . " " . $array['last_name'] . " !";
-            echo "<br>";
-            echo "username:" . $array['username'];
-            ?> </h1>
-
-
-        <div class="auth-page-form-inner">
+                    <a href=" manger_home_page.php"><img src="media/logo.png" alt="Logo" class="logo"></a>
 
 
 
-            <div id="Req" style="overflow-x:auto;">
-                <h2>Requests</h2>
-                <?php
-                for ($a = 0;
-                        $a < count($serv);
-                        $a++) {
-                    ?>
-                    <table id="Requests" border="1" cellpadding="2">
-                        <tr>
-                            <th id="Request type" colspan="3"><?php echo $serv[$a]["type"];
-                    ?></th>
 
-                        </tr>
-                        <tr>
-                            <th>Requests</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                        <?php
-                        for ($z = 0; $z < count($emp); $z++) {
+
+                    <a  class="btn btn--v3" id="myLink" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign out</a>
+                </div>
+
+            </header>
+
+            <h1 id="name">Welcome <?php
+                echo $array['first_name'] . " " . $array['last_name'] . " !";
+                echo "<br>";
+                ?> </h1>
+            <h3 style="text-align:center; ">Manager info:</h3>
+            <h4 style="text-align:center;"> name: <?php echo  $array['first_name'] . " " . $array['last_name']; ?></h4>
+            <h4 style="text-align:center;"> username: <?php echo $array['username']; ?></h4>
+
+            <div class="auth-page-form-inner">
+
+
+
+                <div id="Req" style="overflow-x:auto;">
+
+
+                    <h2>Requests</h2>
+                    <?php
+                    for ($a = 0; $a < count($serv); $a++) {
+                        $sercount = 0;
+                        ?>
+                        <table id="Requests" border="1" cellpadding="2">
+                            <tr>
+                                <th id="Request type" colspan="3"><?php echo $serv[$a]["type"];
+                        ?></th>
+
+                            </tr>
+                            <tr>
+                                <th>Requests</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            <?php
                             for ($i = 0; $i < count($req); $i++) {
-                                if ($emp[$z]['id'] == $req[$i]['emp_id'] && $serv[$a]['id'] == $req[$i]['service_id']) {
-                                    $id = $req[$z]['id'];
-                                    ?>
-                                    <tr><?php
-                                        if ($req[$z]['status'] != "In progress")
-                                            echo "<td>";
-                                        else
-                                            echo '<td style="background-color:#5F9EA0; text-align:center; ">';
+                            for ($z = 0; $z < count($emp); $z++) {
+                                
+                                    if ($emp[$z]['id'] == $req[$i]['emp_id'] && $serv[$a]['id'] == $req[$i]['service_id']) {
+                                        $id = $req[$i]['id'];
+                                        $sercount++;
                                         ?>
-                                    <a href="Request_information_page.php?id=<?php echo $emp[$z]['id']; ?>" ><?php
-                                        echo $emp[$z]['first_name'];
-                                        echo " ";
-                                        echo $emp[$z]['last_name'];
-                                        ?> - <?php echo $req[$z]['id']; ?></a> </td>
-                                    <?php
-                                    if ($req[$z]['status'] != "In progress")
-                                        echo "<td>";
-                                    else
-                                        echo '<td style="background-color:#5F9EA0; text-align:center; color:white;">';
 
-                                    echo $req[$z]['status'];
-                                    ?></td>
+                                        <tr><?php
+                                            if ($req[$i]['status'] != "in progress")
+                                                echo "<td>";
+                                            else
+                                                echo '<td style="background-color:#5F9EA0; text-align:center; ">';
+
+                                            echo "<a href='Request_information_page.php?id=$id'>";
+                                            echo $emp[$z]['first_name'];
+                                            echo " ";
+                                            echo $emp[$z]['last_name'];
+                                            ?> - <?php echo $req[$i]['id']; ?></a> </td>
+                                            <?php
+                                            if ($req[$i]['status'] != "in progress")
+                                                echo "<td>";
+                                            else
+                                                echo '<td style="background-color:#5F9EA0; text-align:center; color:white;">';
+
+                                            echo $req[$i]['status'];
+                                            ?></td>
+                                            <?php
+                                            if ($req[$i]['status'] == "in progress") {
+                                                echo '<td style="background-color:#5F9EA0; text-align:center;">';
+                                                echo "  <button  class='btn btn--v2'><a href='manger_home_page.php?id=$id&action=decline' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
+                                                echo " <button class='btn btn--v1'><a href='manger_home_page.php?id=$id&action=approve' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
+                                            } else if ($req[$i]['status'] == "approved") {
+                                                echo "<td>  <button  class='btn btn--v2'><a href='manger_home_page.php?id=$id&action=decline' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
+                                            } else if ($req[$i]['status'] == "declined")
+                                                echo "<td>  <button class='btn btn--v1'><a href='manger_home_page.php?id=$id&action=approve' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
+                                            ?>
+                                            </td>
+                                        </tr>
                                         <?php
-                                        if ($req[$z]['status'] == "In progress") {
-                                            echo '<td style="background-color:#5F9EA0; text-align:center;">';
-                                            echo ' <button onclick="Approve();" class="btn btn--v2">Approve</button>';
-                                            echo ' <button onclick="Decline();" class="btn btn--v1">Decline</button>';
-                                        } else if ($req[$z]['status'] == "Approved") {
-                                            echo ' <td> <button onclick="Decline();" class="btn btn--v1">Decline</button>';
-                                        } else if ($req[$z]['status'] == "Declined")
-                                            echo "<td>  <button onclick='Approve();' class='btn btn--v2'><a href='manager-homepage.php?id=$id&action=decline' class = 'w3-bar-item w3-button mtry'>Approve</a></button> ";
-                                        ?>
-                                    </td>
-                                    </tr>
-                                    <?php
+                                    }
                                 }
                             }
-                        }
-                        ?>
+                            if ($sercount == 0) {
+                                echo '<td colspan="3" style="text-align:center;"> No requsets </td>';
+                            }
+                            ?>
 
 
 
-                    </table>
-                <?php } ?>
-
-                <script>
-// Modal Image Gallery
-                    function onClick(element) {
-                        document.getElementById("img01").src = element.src;
-                        document.getElementById("modal01").style.display = "block";
-                        var captionText = document.getElementById("caption");
-                        captionText.innerHTML = element.alt;
-                    }
-
-
-// Toggle between showing and hiding the sidebar when clicking the menu icon
-                    var mySidebar = document.getElementById("mySidebar");
-
-                    function w3_open() {
-                        if (mySidebar.style.display === 'block') {
-                            mySidebar.style.display = 'none';
-                        } else {
-                            mySidebar.style.display = 'block';
-                        }
-                    }
-
-// Close the sidebar with the close button
-                    function w3_close() {
-                        mySidebar.style.display = "none";
-                    }
-
-                </script>
+                        </table>
+                    <?php } ?>
 
 
 
 
+
+
+                </div>
             </div>
-        </div>
 
 
 
 
-        <footer id="footer1">
+            <footer id="footer1">
 
 
-            <!--Copy Rights-->
-            <p>Copyright &copy; 2022 MANGENET . All Rights Reserved</p>
+                <!--Copy Rights-->
+                <p>Copyright &copy; 2022 MANGENET . All Rights Reserved</p>
 
-        </footer>
-
+            </footer>
+            <form id="logout-form" action="./employee_auth_middleware.php" method="POST" style="display: none;">
+                <input type="hidden" name="signout" value="1">
+            </form>
+        </main>
     </body>
 
 </html>
