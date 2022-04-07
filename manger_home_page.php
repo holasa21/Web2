@@ -33,9 +33,13 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
         $req_data = mysqli_fetch_assoc($req_q);
 
         $req_q = mysqli_query($conn, "UPDATE `request` SET status = 'approved' WHERE id = '$req_id'");
+             
         if ($req_q) {
             header("Location: manger_home_page.php");
-            die();
+            die(); 
+            
+ 
+            
         }
     } else if ($action == "decline") {
         $req_q = mysqli_query($conn, "SELECT * FROM `request` WHERE id = '$req_id'")or die(mysqli_error($conn));
@@ -78,11 +82,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 
                     <a href=" manger_home_page.php"><img src="media/logo.png" alt="Logo" class="logo"></a>
 
-
-
-
-
-                    <a  class="btn btn--v3" id="myLink" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign out</a>
+                    <a  href = "signout.php"  class="btn btn--v3" >Sign out</a>
                 </div>
 
             </header>
@@ -92,7 +92,7 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
                 echo "<br>";
                 ?> </h1>
             <h3 style="text-align:center; ">Manager info:</h3>
-            <h4 style="text-align:center;"> name: <?php echo  $array['first_name'] . " " . $array['last_name']; ?></h4>
+            <h4 style="text-align:center;"> name: <?php echo $array['first_name'] . " " . $array['last_name']; ?></h4>
             <h4 style="text-align:center;"> username: <?php echo $array['username']; ?></h4>
 
             <div class="auth-page-form-inner">
@@ -120,15 +120,15 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
                             </tr>
                             <?php
                             for ($i = 0; $i < count($req); $i++) {
-                            for ($z = 0; $z < count($emp); $z++) {
-                                
+                                for ($z = 0; $z < count($emp); $z++) {
+
                                     if ($emp[$z]['id'] == $req[$i]['emp_id'] && $serv[$a]['id'] == $req[$i]['service_id']) {
                                         $id = $req[$i]['id'];
                                         $sercount++;
                                         ?>
 
                                         <tr><?php
-                                            if ($req[$i]['status'] != "in progress")
+                                            if ($req[$i]['status'] == "declined" || $req[$i]['status'] == "approved")
                                                 echo "<td>";
                                             else
                                                 echo '<td style="background-color:#5F9EA0; text-align:center; ">';
@@ -139,24 +139,26 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
                                             echo $emp[$z]['last_name'];
                                             ?> - <?php echo $req[$i]['id']; ?></a> </td>
                                             <?php
-                                            if ($req[$i]['status'] != "in progress")
+                                            if ($req[$i]['status'] == "declined" || $req[$i]['status'] == "approved") {
                                                 echo "<td>";
-                                            else
-                                                echo '<td style="background-color:#5F9EA0; text-align:center; color:white;">';
-
-                                            echo $req[$i]['status'];
+                                                echo $req[$i]['status'];
+                                            } else {
+                                                $req[$i]['status'] = "in progress";
+                                                echo '<td style="background-color:#5F9EA0; text-align:center; color:white;">' . $req[$i]['status'];
+                                            }
                                             ?></td>
                                             <?php
-                                            if ($req[$i]['status'] == "in progress") {
+                                            if ($req[$i]['status'] != "declined" && $req[$i]['status'] != "approved") {
                                                 echo '<td style="background-color:#5F9EA0; text-align:center;">';
                                                 echo "  <button  class='btn btn--v2'><a href='manger_home_page.php?id=$id&action=decline' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
                                                 echo " <button class='btn btn--v1'><a href='manger_home_page.php?id=$id&action=approve' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
                                             } else if ($req[$i]['status'] == "approved") {
                                                 echo "<td>  <button  class='btn btn--v2'><a href='manger_home_page.php?id=$id&action=decline' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
                                             } else if ($req[$i]['status'] == "declined")
-                                                echo "<td>  <button class='btn btn--v1'><a href='manger_home_page.php?id=$id&action=approve' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
+                                                echo "<td>  <button class='btn btn--v1''><a href='manger_home_page.php?id=$id&action=approve' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
                                             ?>
                                             </td>
+                                            
                                         </tr>
                                         <?php
                                     }
@@ -185,15 +187,16 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
 
             <footer id="footer1">
 
+ 
 
                 <!--Copy Rights-->
                 <p>Copyright &copy; 2022 MANGENET . All Rights Reserved</p>
 
             </footer>
-            <form id="logout-form" action="./employee_auth_middleware.php" method="POST" style="display: none;">
-                <input type="hidden" name="signout" value="1">
-            </form>
+  
         </main>
     </body>
+
+    <!--$result1 = mysqli_query($conn, "SELECT employee.* FROM `employee` LEFT JOIN `request` ON  employee.id=request.emp_id ORDER BY request.status DESC ") or die(mysqli_error($conn));-->
 
 </html>
