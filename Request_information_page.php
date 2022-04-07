@@ -61,11 +61,19 @@ else{
                 <h1 class="d-inline fw-bold text-darksky"><?= $req_data['type'] ?></h1>
                 <h2 class="d-inline text-muted ms-2 display-6 fs-3"><?= $req_data['status'] ?></h2>
                 <h5 class="my-3 fs-4" style="text-transform: capitalize;"><?= $req_data['first_name']." ".$req_data['last_name'] ?></h5>
-                <a class="col-2 btn btn-darksky fs-3" style="position: absolute; top:25%; margin:0% 0% 0% 59.5%;" href="Edit_request_page.php?id=<?= $request_id ?>">Edit</a>
+                <?php if (isset($_SESSION['employee_id'])){?>
+                <a class="col-2 btn btn-outline-darksky fs-3" style="position: absolute; top:25%; margin:0% 0% 0% 59.5%;" href="Edit_request_page.php?id=<?= $request_id ?>">Edit</a><?php }?>
 
-                <!-- <button type="button" class="btn btn-success text-white">Approve</button>
-                <button type="button" class="btn btn-danger text-white">Decline</button>
-                <a class="btn btn-outline-darksky" href="#" role="button">Edit</a> -->
+                <?php if (isset($_SESSION['manager_id'])) {
+                    if ($req_data['status'] != "declined" && $req_data['status'] != "approved") {
+                    echo "  <button  class='btn btn-danger'><a  style='color:white; text-decoration: none;' href='manger_home_page.php?id=$request_id &action=decline' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
+                    echo " <button class='btn btn-success''><a  style='color:white; text-decoration: none;' href='manger_home_page.php?id=$request_id &action=approve' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
+                    } else if ($req_data['status'] == "approved") {
+                    echo "<button  class='btn btn-danger'><a  style='color:white; text-decoration: none;' href='manger_home_page.php?id=$request_id &action=decline' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
+                    } else if ($req_data['status'] == "declined")
+                    echo "<button class='btn btn-success'><a  style='color:white; text-decoration: none;' href='manger_home_page.php?id=$request_id &action=approve' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
+                }
+                ?>
             </div>
                 <div class="p-2 mx-5 mt-4 rounded" style="background-color: #d4d5d6;">
                     <div class="mx-5">
