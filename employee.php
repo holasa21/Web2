@@ -31,26 +31,30 @@ if(isset($_POST['update'])){
     $uploadDir = 'files';
 
     if(isset($_FILES['myfile1']) || isset($_FILES['myfile2'])){
-        if(!is_dir($uploadDir)){
-            mkdir($uploadDir);
-        }
         if(isset($_FILES['myfile1']) && $_FILES['myfile1']['size']>0){
             $file1Name = $_FILES['myfile1']['name'];
-        move_uploaded_file($_FILES['myfile1']['tmp_name'], $file1Name);
+        move_uploaded_file($_FILES['myfile1']['tmp_name'], $uploadDir.'/'. $file1Name);
         }
         else{
             $file1Name = $_POST['file1ExistingValue'] ;
         }
         if(isset($_FILES['myfile2']) && $_FILES['myfile2']['size']>0){
             $file2Name = $_FILES['myfile2']['name'];
-        move_uploaded_file($_FILES['myfile2']['tmp_name'],$file2Name);
+        move_uploaded_file($_FILES['myfile2']['tmp_name'], $uploadDir.'/'.$file2Name);
         }
         else{
             $file2Name = $_POST['file2ExistingValue'] ;
         }
     }
-
-    $up_qry = " UPDATE `request` SET `service_id`='$type_update',`description`='$dec_update', `attachment1`='$file1Name',`attachment2`='$file2Name' WHERE id = $up_id " ;
+    if(strlen($file1Name)>0 && strlen($file2Name)>0 ){	
+    $up_qry = " UPDATE `request` SET `service_id`='$type_update',`description`='$dec_update', `attachment1`='$uploadDir/$file1Name',`attachment2`='$uploadDir/$file2Name' WHERE id = $up_id " ;
+    }
+    if(strlen($file1Name)>0 && strlen($file2Name)==0){	
+    $up_qry = " UPDATE `request` SET `service_id`='$type_update',`description`='$dec_update', `attachment1`='$uploadDir/$file1Name' WHERE id = $up_id " ;
+    }
+    if(strlen($file1Name)==0 && strlen($file2Name)>0){	
+    $up_qry = " UPDATE `request` SET `service_id`='$type_update',`description`='$dec_update',`attachment2`='$uploadDir/$file2Name' WHERE id = $up_id " ;
+    }
     $update = $conn->query($up_qry);
     if($update){
 
@@ -110,6 +114,7 @@ $requests_approved = $conn->query($requests_qry_processed);
             <p class="emp-welcome text-darksky fs-1">Welcome <span class="emp-name" style="text-transform: capitalize;"> <?php echo $auth['first_name']." ".$auth['last_name'] ?></span>!</p>
             <p>Employee's ID: <span class="emp-id"><?php echo $auth['emp_number'] ?></span></p>
             <P>Job Title: <span class="job-title"><?php echo $auth['job_title'] ?></span></p>
+
         </div>
         <div id="buttons">
             <a class="offset-7 col-5 btn btn-lg btn-darksky" id="myLink" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign out</a>
