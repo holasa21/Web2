@@ -44,7 +44,7 @@ session_start();
             <form method="post" action="login_manger_process.php" onsubmit="validation(event);">
                 <div class="input_wrap">
                     <div class="input_field">
-                        Username <input type="text" placeholder="ex: user2001" class="input" id="input_text" name="username" pattern=".{1,}" maxlength="10">
+                        Username <input type="text" placeholder="ex: user2001" class="input" id="input_text" name="username" pattern=".{1,10}" maxlength="10">
                     </div>
                 </div>
                 <div class="input_wrap">
