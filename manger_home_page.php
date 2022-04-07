@@ -15,9 +15,6 @@ $result1 = mysqli_query($conn, "SELECT * FROM `employee`") or die(mysqli_error($
 while ($n = mysqli_fetch_assoc($result1))
     $emp[] = $n;
 
-$result2 = mysqli_query($conn, "SELECT * FROM `request` ORDER BY status DESC") or die(mysqli_error($conn));
-while ($n = mysqli_fetch_assoc($result2))
-    $req[] = $n;
 
 $result3 = mysqli_query($conn, "SELECT * FROM `service`") or die(mysqli_error($conn));
 while ($n = mysqli_fetch_assoc($result3))
@@ -51,6 +48,10 @@ if (isset($_GET['action']) && isset($_GET['id'])) {
         }
     }
 }
+
+$result2 = mysqli_query($conn, "SELECT * FROM `request` ORDER BY status DESC") or die(mysqli_error($conn));
+while ($n = mysqli_fetch_assoc($result2))
+    $req[] = $n;
 ?>
 <!DOCTYPE html>
 <html>
