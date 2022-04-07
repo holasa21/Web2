@@ -35,15 +35,15 @@ if(isset($_POST['update'])){
             mkdir($uploadDir);
         }
         if(isset($_FILES['myfile1']) && $_FILES['myfile1']['size']>0){
-            $file1Name = $uploadDir.'/'.$_FILES['myfile1']['name'];
+            $file1Name = $_FILES['myfile1']['name'];
         move_uploaded_file($_FILES['myfile1']['tmp_name'], $file1Name);
         }
         else{
             $file1Name = $_POST['file1ExistingValue'] ;
         }
         if(isset($_FILES['myfile2']) && $_FILES['myfile2']['size']>0){
-            $file2Name = $uploadDir.'/'.$_FILES['myfile2']['name'];
-        move_uploaded_file($_FILES['myfile2']['tmp_name'], $uploadDir.'/'.$file2Name);
+            $file2Name = $_FILES['myfile2']['name'];
+        move_uploaded_file($_FILES['myfile2']['tmp_name'],$file2Name);
         }
         else{
             $file2Name = $_POST['file2ExistingValue'] ;
@@ -84,8 +84,8 @@ $requests_processing = $conn->query($requests_qry_processing);
 
 
 
-$requests_qry_approved = " SELECT *,request.id as id FROM `request` LEFT JOIN `service` ON request.service_id = service.id WHERE request.emp_id = '$employee_id' AND request.status= 'approved' ";
-$requests_approved = $conn->query($requests_qry_approved);
+$requests_qry_processed = " SELECT *,request.id as id FROM `request` LEFT JOIN `service` ON request.service_id = service.id WHERE request.emp_id = '$employee_id' AND request.status= 'approved' OR request.status= 'declined'";
+$requests_approved = $conn->query($requests_qry_processed);
 
 ?>
 
@@ -110,7 +110,6 @@ $requests_approved = $conn->query($requests_qry_approved);
             <p class="emp-welcome text-darksky fs-1">Welcome <span class="emp-name" style="text-transform: capitalize;"> <?php echo $auth['first_name']." ".$auth['last_name'] ?></span>!</p>
             <p>Employee's ID: <span class="emp-id"><?php echo $auth['emp_number'] ?></span></p>
             <P>Job Title: <span class="job-title"><?php echo $auth['job_title'] ?></span></p>
-
         </div>
         <div id="buttons">
             <a class="offset-7 col-5 btn btn-lg btn-darksky" id="myLink" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign out</a>

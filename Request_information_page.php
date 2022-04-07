@@ -1,7 +1,6 @@
 <?php 
-include 'employee_auth_middleware.php';
+include 'emp-mang-auth-middleware.php';
 require_once 'connection.php';
-
 
 if(!isset($_GET['id'])){
     header('Location: employee.php');
@@ -78,12 +77,17 @@ else{
                     <div class="mt-3">
                         <?php
                         $img_ext=['jpeg','png','gif','svg','Webp','apng','jpg'];
-                        $dotPos=strpos($req_data['attachment1'], '.');
-                        $fileType= substr($req_data['attachment1'],$dotPos+1);
+                        //file 1
+                        $dotPos1=strpos($req_data['attachment1'], '.');
+                        $file1Type= substr($req_data['attachment1'],$dotPos1+1);
+
+                        //file2
+                        $dotPos2=strpos($req_data['attachment2'], '.');
+                        $file2Type= substr($req_data['attachment2'],$dotPos2+1);
 
                         if(!empty($req_data['attachment1'])){
-                            if(file_exists($req_data['attachment1']) && $req_data['attachment1']!='files/'){
-                                if(in_array($fileType, $img_ext)){?>
+                            if(file_exists($req_data['attachment1'])){
+                                if(in_array($file1Type, $img_ext)){?>
                                     <img class="img-fluid" alt="attachment" src="<?= $req_data['attachment1'] ?>">
                             <?php    } else {?>
                                 <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment1'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
@@ -93,9 +97,9 @@ else{
                         ?>
                         <?php
                         if(!empty($req_data['attachment2'])){
-                            if(file_exists($req_data['attachment2']) && $req_data['attachment2']!='files/'){ 
-                                if(in_array($fileType, $img_ext)){?>
-                                    <img class="img-fluid" alt="attachment" src="<?= $req_data['attachment1'] ?>">
+                            if(file_exists($req_data['attachment2'])){ 
+                                if(in_array($file2Type, $img_ext)){?>
+                                    <img class="img-fluid" alt="attachment" src="<?= $req_data['attachment2'] ?>">
                                 <?php }
                                 else { ?>
                                 <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment2'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>

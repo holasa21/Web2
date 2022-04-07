@@ -114,12 +114,25 @@ else{
                     1-Change the current File:
                     <br>
                     <?php
+                    $img_ext=['jpeg','png','gif','svg','Webp','apng','jpg'];
+                    //file 1
+                    $dotPos1=strpos($req_data['attachment1'], '.');
+                    $file1Type= substr($req_data['attachment1'],$dotPos1+1);
+
+                    //file2
+                    $dotPos2=strpos($req_data['attachment2'], '.');
+                    $file2Type= substr($req_data['attachment2'],$dotPos2+1);
+
                         if(!empty($req_data['attachment1'])){
-                            if(file_exists($req_data['attachment1']) && $req_data['attachment1']!='files/'){ ?>
+                            if(file_exists($req_data['attachment1']) && $req_data['attachment1']!='files/'){
+                                if(in_array($file1Type, $img_ext)){?>
+                                    <img class="img-fluid" alt="attachment" src="<?= $req_data['attachment1'] ?>"><br>
+                            <?php    } else {?>
                                 <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment1'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
                             <?php }
+                            }
                         }
-                    ?>
+                        ?>
                     <br>
                     <input type="file" id="myfile" name="myfile1" >
                     <input type="hidden" name="file1ExistingValue" value="<?= $req_data['attachment1'] ?>">
@@ -129,11 +142,16 @@ else{
                     <br>
                     <?php
                         if(!empty($req_data['attachment2'])){
-                            if(file_exists($req_data['attachment2']) && $req_data['attachment2']!='files/'){ ?>
+                            if(file_exists($req_data['attachment2']) && $req_data['attachment2']!='files/'){ 
+                                if(in_array($file2Type, $img_ext)){?>
+                                    <img class="img-fluid" alt="attachment" src="<?= $req_data['attachment2'] ?>">
+                                <?php }
+                                else { ?>
                                 <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment2'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
-                            <?php }
+                            <?php } 
+                             }
                         }
-                    ?>
+                        ?>
                     <br><input type="file" id="myfile" name="myfile2">
                     <input type="hidden" name="file2ExistingValue" value="<?= $req_data['attachment2'] ?>">
                 </p>

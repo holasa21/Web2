@@ -1,6 +1,7 @@
 <?php
 session_start();
-include_once('connection.php');
+require_once 'manager_auth_middleware.php';
+require_once('connection.php');
 
 if (!isset($_SESSION['manager_id'])) {
     header("Location: login_manger.php");
@@ -134,18 +135,18 @@ while ($n = mysqli_fetch_assoc($result2))
                                             else
                                                 echo '<td style="background-color:#5F9EA0; text-align:center; ">';
 
-                                            echo "<a href='Request_information_page.php?id=$id'>";
+                                            echo "<a class='text-darksky' href='Request_information_page.php?id=$id'>";
                                             echo $emp[$z]['first_name'];
                                             echo " ";
                                             echo $emp[$z]['last_name'];
-                                            ?> - <?php echo $req[$i]['id']; ?></a> </td>
+                                            ?> - <?php echo $id; ?></a> </td>
                                             <?php
                                             if ($req[$i]['status'] == "declined" || $req[$i]['status'] == "approved") {
                                                 echo "<td>";
                                                 echo $req[$i]['status'];
                                             } else {
                                                 $req[$i]['status'] = "in progress";
-                                                echo '<td style="background-color:#5F9EA0; text-align:center; color:white;">' . $req[$i]['status'];
+                                                echo '<td class ="text-darksky" style="background-color:#5F9EA0; text-align:center;">' . $req[$i]['status'];
                                             }
                                             ?></td>
                                             <?php
