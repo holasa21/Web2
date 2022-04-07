@@ -77,17 +77,30 @@ else{
                     <strong class="d-inline text-darksky ms-2 display-6 fs-3 fw-bold">Attachment:</strong>
                     <div class="mt-3">
                         <?php
+                        $img_ext=['jpeg','png','gif','svg','Webp','apng','jpg'];
+                        $dotPos=strpos($req_data['attachment1'], '.');
+                        $fileType= substr($req_data['attachment1'],$dotPos+1);
+
                         if(!empty($req_data['attachment1'])){
-                            if(file_exists($req_data['attachment1']) && $req_data['attachment1']!='files/'){ ?>
+                            if(file_exists($req_data['attachment1']) && $req_data['attachment1']!='files/'){
+                                if(in_array($fileType, $img_ext)){?>
+                                    <img class="img-fluid" alt="attachment" src="<?= $req_data['attachment1'] ?>">
+                            <?php    } else {?>
                                 <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment1'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
                             <?php }
+                            }
                         }
                         ?>
                         <?php
                         if(!empty($req_data['attachment2'])){
-                            if(file_exists($req_data['attachment2']) && $req_data['attachment2']!='files/'){ ?>
+                            if(file_exists($req_data['attachment2']) && $req_data['attachment2']!='files/'){ 
+                                if(in_array($fileType, $img_ext)){?>
+                                    <img class="img-fluid" alt="attachment" src="<?= $req_data['attachment1'] ?>">
+                                <?php }
+                                else { ?>
                                 <a class="btn btn-outline-darksky d-block col-2 my-3 fw-bold" href="<?= $req_data['attachment2'] ?>">File Link <i style="font-size:24px" class="fa">&#xf1c1;</i></a>
-                            <?php }
+                            <?php } 
+                             }
                         }
                         ?>
                        </div>
