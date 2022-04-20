@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once 'manager_auth_middleware.php';
 require_once('connection.php');
 
@@ -133,13 +132,15 @@ while ($n = mysqli_fetch_assoc($result2))
                                             if ($req[$i]['status'] == "declined" || $req[$i]['status'] == "approved")
                                                 echo "<td>";
                                             else
-                                                echo '<td style="background-color:#5F9EA0; text-align:center; ">';
+                                                echo "<td style='background-color:#5F9EA0; text-align:center;' >";
 
-                                            echo "<a class='text-darksky' href='Request_information_page.php?id=$id'>";
+                                            echo "<a class='text-darksky tooltip' href='Request_information_page.php?id=$id' onmouseover='showDesc($id)'>";
                                             echo $emp[$z]['first_name'];
                                             echo " ";
                                             echo $emp[$z]['last_name'];
-                                            ?> - <?php echo $id; ?></a> </td>
+                                            ?> - <?php echo $id; ?>
+                                            <span class="tooltiptext" id="<?php echo 'tooltip'.$id?>"></span>
+                                            </a> </td>
                                             <?php
                                             if ($req[$i]['status'] == "declined" || $req[$i]['status'] == "approved") {
                                                 echo "<td>";
@@ -202,3 +203,18 @@ while ($n = mysqli_fetch_assoc($result2))
     <!--$result1 = mysqli_query($conn, "SELECT employee.* FROM `employee` LEFT JOIN `request` ON  employee.id=request.emp_id ORDER BY request.status DESC ") or die(mysqli_error($conn));-->
 
 </html>
+<script>
+    function showDesc(id){
+        loadRequestDescription(id);
+    }
+    function loadRequestDescription(id) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            let res = JSON.parse(this.response)
+            let description = res ? res : "No Description";
+            document.getElementById('tooltip'+id).innerHTML = description;
+        }
+        xhttp.open("GET", "request_info_json.php?id=" + id);
+        xhttp.send();
+    }
+</script>
