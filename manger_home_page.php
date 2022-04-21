@@ -21,34 +21,6 @@ while ($n = mysqli_fetch_assoc($result3))
     $serv[] = $n;
 
 
-
-if (isset($_GET['action']) && isset($_GET['id'])) {
-    $action = $_GET['action'];
-    $req_id = htmlspecialchars($_GET['id'], ENT_QUOTES);
-    if ($action == "approve") {
-        $req_q = mysqli_query($conn, "SELECT * FROM `request` WHERE id = '$req_id' ")or die(mysqli_error($conn));
-        $req_data = mysqli_fetch_assoc($req_q);
-
-        $req_q = mysqli_query($conn, "UPDATE `request` SET status = 'approved' WHERE id = '$req_id'");
-             
-        if ($req_q) {
-            header("Location: manger_home_page.php");
-            die(); 
-            
- 
-            
-        }
-    } else if ($action == "decline") {
-        $req_q = mysqli_query($conn, "SELECT * FROM `request` WHERE id = '$req_id'")or die(mysqli_error($conn));
-        $req_data = mysqli_fetch_assoc($req_q);
-        $req_q = mysqli_query($conn, "UPDATE `request` SET status = 'declined' WHERE id = '$req_id'");
-        if ($req_q) {
-            header("Location: manger_home_page.php");
-            die();
-        }
-    }
-}
-
 $result2 = mysqli_query($conn, "SELECT * FROM `request` ORDER BY status DESC") or die(mysqli_error($conn));
 while ($n = mysqli_fetch_assoc($result2))
     $req[] = $n;
@@ -108,7 +80,7 @@ while ($n = mysqli_fetch_assoc($result2))
                     for ($a = 0; $a < count($serv); $a++) {
                         $sercount = 0;
                         ?>
-                        <table id="Requests" border="1" cellpadding="2">
+                        <table id="<?php echo $serv[$a]["type"];?>" border="1" cellpadding="2">
                             <tr>
                                 <th id="Request type" colspan="3"><?php echo $serv[$a]["type"];
                         ?></th>
@@ -128,7 +100,7 @@ while ($n = mysqli_fetch_assoc($result2))
                                         $sercount++;
                                         ?>
 
-                                        <tr><?php
+                                        <tr id="<?php echo $id."tr"?>"><?php
                                             if ($req[$i]['status'] == "declined" || $req[$i]['status'] == "approved")
                                                 echo "<td>";
                                             else
@@ -151,14 +123,16 @@ while ($n = mysqli_fetch_assoc($result2))
                                             }
                                             ?></td>
                                             <?php
+                                            $accept = '"approve"';
+                                            $reject = '"decline"';
                                             if ($req[$i]['status'] != "declined" && $req[$i]['status'] != "approved") {
                                                 echo '<td style="background-color:#5F9EA0; text-align:center;">';
-                                                echo "  <button  class='btn btn--v2'><a href='manger_home_page.php?id=$id&action=decline' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
-                                                echo " <button class='btn btn--v1'><a href='manger_home_page.php?id=$id&action=approve' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
+                                                echo "  <button  class='btn btn--v2'><a onclick='return manageRequest($id,"."$reject".")' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
+                                                echo " <button class='btn btn--v1'><a  onclick='return manageRequest($id,"."$accept".")' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
                                             } else if ($req[$i]['status'] == "approved") {
-                                                echo "<td>  <button  class='btn btn--v2'><a href='manger_home_page.php?id=$id&action=decline' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
+                                                echo "<td>  <button  class='btn btn--v2'><a  onclick='return manageRequest($id,"."$reject".")' class = 'w3-bar-item w3-button mtry'>decline</a></button> ";
                                             } else if ($req[$i]['status'] == "declined")
-                                                echo "<td>  <button class='btn btn--v1''><a href='manger_home_page.php?id=$id&action=approve' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
+                                                echo "<td>  <button class='btn btn--v1'><a  onclick='return manageRequest($id,"."$accept".")' class = 'w3-bar-item w3-button mtry'>approve</a></button> ";
                                             ?>
                                             </td>
                                             
@@ -171,39 +145,22 @@ while ($n = mysqli_fetch_assoc($result2))
                                 echo '<td colspan="3" style="text-align:center;"> No requsets </td>';
                             }
                             ?>
-
-
-
                         </table>
                     <?php } ?>
-
-
-
-
-
-
                 </div>
             </div>
-
-
-
-
             <footer id="footer1">
-
- 
-
                 <!--Copy Rights-->
                 <p>Copyright &copy; 2022 MANGENET . All Rights Reserved</p>
 
             </footer>
-  
         </main>
     </body>
 
     <!--$result1 = mysqli_query($conn, "SELECT employee.* FROM `employee` LEFT JOIN `request` ON  employee.id=request.emp_id ORDER BY request.status DESC ") or die(mysqli_error($conn));-->
 
 </html>
-<script>
+<script type="text/javascript">
     function showDesc(id){
         loadRequestDescription(id);
     }
@@ -217,4 +174,47 @@ while ($n = mysqli_fetch_assoc($result2))
         xhttp.open("GET", "request_info_json.php?id=" + id);
         xhttp.send();
     }
+
+    function manageRequest(id,action){
+        console.log(id);
+        console.log(action);
+        manageRequestAjax(id,action);
+        return false;
+    }
+
+    function manageRequestAjax(id,action) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            let res = JSON.parse(this.response)
+            let tr  = document.getElementById(id+'tr');
+            let childrens = tr.children;
+            console.log(childrens);
+            childrens[0].style.textAlign = 'unset'
+            childrens[1].style.textAlign = 'unset'
+            childrens[2].style.textAlign = 'unset'
+            childrens[0].style.backgroundColor = 'unset'
+            childrens[1].style.backgroundColor = 'unset'
+            childrens[2].style.backgroundColor = 'unset'
+
+            childrens[1].innerHTML=res;
+            let btn = "";
+            if(res=="approved"){
+                text = 'decline'
+                btn = '"decline"';
+                childrens[2].innerHTML =  `<button  class='btn btn--v2'><a  onclick='return manageRequest(${id},${btn})' class = 'w3-bar-item w3-button mtry'>${text}</a></button>`
+            }else if(res=="declined"){
+                text = 'approve'
+                btn = '"approve"';
+                childrens[2].innerHTML =  `<button  class='btn btn--v1'><a  onclick='return manageRequest(${id},${btn})' class = 'w3-bar-item w3-button mtry'>${text}</a></button>`
+            }
+           
+        }
+        xhttp.open("GET", "approve_decline_request.php?id="+id+"&action="+action);
+        xhttp.send();
+    }
+
+   
+
+
+
 </script>
